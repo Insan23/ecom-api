@@ -1,0 +1,21 @@
+[
+  {
+    "nama": "aldi",
+    "alamat": "jember"
+  },
+  {
+    "nama": "bagus",
+    "alamat": "magetan"
+  },
+  {
+    "nama": "aleq",
+    "alamat": "surabaya"
+  },
+  {
+    "nama": "faruq",
+    "alamat": "magetan"
+  }
+]
+
+//filter alamat magetan, pakai updateOne
+//updateMany

@@ -1,60 +1,40 @@
-const {MongoClient, ObjectId} = require('mongodb');
+import 'dotenv/config';
+import mongoose from 'mongoose';
+import express, {response} from 'express'; // kalo import library tanpa ketik .js
+import userRoutes from './routes/User.js'; // kalo import file js dari milik sendiri, ketik .js nya
 
-async function runGetStarted() {
-    const dbServer = new MongoClient('mongodb://localhost:27017');
-    try {
-        const db = dbServer.db('testing-db');
-        //di SQL namanya tabel
-        const userCollection = db.collection('user');
+// inisialisasi express app, untuk REST API, yang berhubungan dengan operasi http request
+const app = express();
+const port = process.env.PORT || 4000;
+const uri = process.env.MONGODB_URI;
+const dbName = process.env.DATABASE_NAME;
 
-        // await userCollection.insertOne({
-        //     nama: "bagus",
-        //     alamat: "magetan",
-        //     umur: 20
-        // });
-        /**
-         * SQL      |   noSQL (mongodb)
-         * Tabel    |   collection
-         * row data |   document
-         */
+// middleware untuk parsing/mengelola json
+app.use(express.json());
 
-        const query = {nama: 'bagus'};
+// koneksi ke mongodb server
+mongoose.connect(`${uri}/${dbName}`)
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
 
-        const satuUser = await userCollection.findOne(query)
+// ketik semua api endpoint disini
+app.use('/api/user', userRoutes);
 
-        const satuAtauBanyakUser = await userCollection.find({nama: 'bagus'});
+// testing api endpoint, bisa dicek di browser (atau aplikasi postman)
+// dan ketik localhost:4000/api/status
+app.get('/api/status', async (req, res) => {
+    res.send({
+        "status": "koneksi berhasil",
+    });
+});
+// contoh kirim data dengan http status code (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status)
+app.get('/api/status-v2', async (req, res) => {
+    res.status(500).send({
+        "status": "koneksi berhasil dengan status 500",
+    });
+});
 
-        //syntax untuk update collection
-        /*
-        const updateUser = await userCollection.updateOne(
-            {_id: new ObjectId('68fccedc0f69cd3fee26f402')},
-            {$set: { nama: "aldi", alamat: "surabaya" }},
-            {upsert: true}, // update or insert
-        );
-         */
-        //syntax untuk insert
-        // const insertData = await userCollection.insertOne(
-        //     {nama: 'bagus', alamat: 'magetan'}
-        // );
-        // const insertData = await userCollection.insertMany([
-        //     {nama: 'bagus', alamat: 'magetan'},
-        //     {nama: 'aldi', alamat: 'jabar'},
-        //     {nama: 'faruq', alamat: 'jateng'}
-        // ]);
-
-        //syntax untuk delete
-        const deleteData = await userCollection.deleteMany({alamat: 'magetan'});
-
-        // for await (const sat of satuAtauBanyakUser) {
-            // console.log(sat);
-        //     console.log(sat['_id']);
-        // }
-        // console.log(satuUser);
-        // console.log(updateUser);
-        console.log(deleteData);
-    } finally {
-        await dbServer.close();
-    }
-}
-
-runGetStarted().catch(console.dir);
+// inisiasi REST API server
+app.listen(port, () => {
+    console.log("Server Listening on PORT:", port);
+});

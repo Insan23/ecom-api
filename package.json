@@ -9,9 +9,13 @@
   },
   "keywords": [],
   "author": "",
+  "port": 3000,
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
-    "mongodb": "6.20"
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongodb": "6.20",
+    "mongoose": "^8.19.2"
   }
 }

@@ -1,4 +1,8 @@
+# excluded directory
 .idea
 .git
 node_modules
+
+# excluded file
+.env
 package-lock.json
