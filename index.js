@@ -11,6 +11,7 @@ const dbName = process.env.DATABASE_NAME;
 
 // middleware untuk parsing/mengelola json
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // koneksi ke mongodb server
 mongoose.connect(`${uri}/${dbName}`)
