@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 //oaasldmasd
 // fitur baru
+// nambah insert kode
 const userSchema = new mongoose.Schema({
     username: {type: String, required: true},
     password: {type: String, required: true},
