@@ -21,21 +21,23 @@ router.post('/login', async (req, res) => {
 // ambil semua data user (untuk admin sepertinya)
 router.get('/', async (req, res) => {
     const users = await User.find();
-    res.json(users);
+    return res.status(200).send(users);
+    // res.json(users);
 });
 
 // buat user baru, register
 router.post('/', async (req, res) => {
-    const { username, name, password, email, address } = req.body;
+    const { username, password, email } = req.body;
+    console.log(req.body);
     const userInsert = new User({
         username: username,
-        name: name,
         password: password,
         email: email,
-        address: address
     });
     const insert = await userInsert.save();
-    res.json(insert);
+    console.log(insert);
+    return res.status(200).send(insert);
+    // res.json(insert);
 });
 
 // ambil satu data user, untuk login, mencocokkan user pw dengan data di database
