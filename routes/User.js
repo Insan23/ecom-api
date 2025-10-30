@@ -3,6 +3,21 @@ import User from '../model/User.js';
 
 const router = express.Router();
 
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) { //jika email pass kosong, nanti dicek juga di aplikasi
+        res.status(404).send({})
+    }
+    const result = await User.findOne({ $and:
+            [{ email: email }, { password: password }]
+    });
+    if (!result) {
+        return res.status(404).send({'status': 'user not found'});
+    } else {
+        return res.status(200).send(result);
+    }
+});
+
 // ambil semua data user (untuk admin sepertinya)
 router.get('/', async (req, res) => {
     const users = await User.find();
